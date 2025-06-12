@@ -1,0 +1,93 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+    --primary: #00B98E;
+    --secondary: #FF6922;
+    --light: #EFFDF5;
+    --dark: #0E2E50;
+}
+
+body {
+    font-family: 'Rubik', sans-serif;
+    color: #555555;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--dark);
+}
+
+.btn {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: 50px;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: #009d7a;
+    border-color: #009d7a;
+}
+
+.text-primary {
+    color: var(--primary) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+/* Animation Classes */
+.wow {
+    visibility: hidden;
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+.fadeInLeft {
+    animation-name: fadeInLeft;
+}
+
+.fadeInRight {
+    animation-name: fadeInRight;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translate3d(-100%, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translate3d(100%, 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}

@@ -1,0 +1,67 @@
+<nav class="navbar navbar-expand-lg fixed-top navbar-light px-4 px-lg-5 py-3 py-lg-0">
+    <a routerLink="/" class="navbar-brand p-0">
+        <h1 class="display-6 text-primary m-0"><i class="fas fa-envelope me-3"></i>FreelanceInvoice</h1>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="fa fa-bars"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto py-0">
+            <a routerLink="/" class="nav-item nav-link active">Home</a>
+            <a routerLink="/about" class="nav-item nav-link">About</a>
+            <a routerLink="/services" class="nav-item nav-link">Services</a>
+            
+            <!-- Logged in user navigation -->
+            <ng-container *ngIf="authService.currentUser$ | async as user">
+                <a routerLink="/dashboard" class="nav-item nav-link">Dashboard</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Invoices</a>
+                    <div class="dropdown-menu m-0">
+                        <a routerLink="/invoices" class="dropdown-item">All Invoices</a>
+                        <a routerLink="/invoices/new" class="dropdown-item">Create Invoice</a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Clients</a>
+                    <div class="dropdown-menu m-0">
+                        <a routerLink="/clients" class="dropdown-item">All Clients</a>
+                        <a routerLink="/clients/new" class="dropdown-item">Add Client</a>
+                    </div>
+                </div>
+            </ng-container>
+
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                <div class="dropdown-menu m-0">
+                    <a routerLink="/features" class="dropdown-item">Features</a>
+                    <a routerLink="/pricing" class="dropdown-item">Pricing</a>
+                    <a routerLink="/blog" class="dropdown-item">Blog</a>
+                    <a routerLink="/testimonial" class="dropdown-item">Testimonial</a>
+                </div>
+            </div>
+            <a routerLink="/contact" class="nav-item nav-link">Contact Us</a>
+        </div>
+        
+        <!-- User is not logged in -->
+        <ng-container *ngIf="!(authService.currentUser$ | async)">
+            <a routerLink="/auth/login" class="btn btn-light border border-primary rounded-pill text-primary py-2 px-4 me-4">Log In</a>
+            <a routerLink="/auth/register" class="btn btn-primary rounded-pill text-white py-2 px-4">Sign Up</a>
+        </ng-container>
+
+        <!-- User is logged in -->
+        <ng-container *ngIf="authService.currentUser$ | async as user">
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <img *ngIf="user.profilePicture" [src]="user.profilePicture" class="rounded-circle me-2" style="width: 32px; height: 32px; object-fit: cover;">
+                    {{ user.firstName }} {{ user.lastName }}
+                </a>
+                <div class="dropdown-menu m-0">
+                    <a routerLink="/dashboard" class="dropdown-item">Dashboard</a>
+                    <a routerLink="/profile" class="dropdown-item">Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a (click)="authService.logout()" class="dropdown-item" style="cursor: pointer;">Logout</a>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</nav>

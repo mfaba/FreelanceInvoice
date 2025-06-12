@@ -1,0 +1,58 @@
+<div class="fixed-plugin" [ngClass]="{'show': state}">
+    <div class="dropdown show-dropdown">
+        <a href="#" (click)="$event.preventDefault(); state = !state">
+            <i class="fa fa-cog fa-2x"> </i>
+        </a>
+        <ul class="dropdown-menu">
+            <li class="header-title"> Sidebar Background</li>
+            <li class="adjustments-line">
+                <a class="switch-trigger background-color">
+                    <div class="badge-colors text-center">
+                        <span class="badge filter badge-yellow" data-color="yellow" (click)="changeSidebarColor('yellow')"></span>
+                        <span class="badge filter badge-blue" data-color="blue" (click)="changeSidebarColor('blue')"></span>
+                        <span class="badge filter badge-green" data-color="green" (click)="changeSidebarColor('green')"></span>
+                        <span class="badge filter badge-orange" data-color="orange" (click)="changeSidebarColor('orange')"></span>
+                        <span class="badge filter badge-red" data-color="red" (click)="changeSidebarColor('red')"></span>
+                        <span class="badge filter badge-purple active" data-color="purple" (click)="changeSidebarColor('purple')"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+            <li class="header-title">Sidebar Active Color</li>
+            <li class="adjustments-line">
+                <a class="switch-trigger active-color">
+                    <div class="badge-colors text-center">
+                        <span class="badge filter badge-purple" data-color="purple" (click)="changeSidebarActiveColor('purple')"></span>
+                        <span class="badge filter badge-blue" data-color="blue" (click)="changeSidebarActiveColor('blue')"></span>
+                        <span class="badge filter badge-green" data-color="green" (click)="changeSidebarActiveColor('green')"></span>
+                        <span class="badge filter badge-orange" data-color="orange" (click)="changeSidebarActiveColor('orange')"></span>
+                        <span class="badge filter badge-red" data-color="red" (click)="changeSidebarActiveColor('red')"></span>
+                        <span class="badge filter badge-yellow active" data-color="yellow" (click)="changeSidebarActiveColor('yellow')"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+            <li class="button-container">
+                <div class="button-container">
+                    <a href="https://www.creative-tim.com/product/paper-dashboard-angular" target="_blank" class="btn btn-primary btn-block btn-fill">Download Free!</a>
+                </div>
+            </li>
+            <li class="header-title">Want more components?</li>
+            <li class="button-container">
+                <div class="button-container">
+                    <a href="https://www.creative-tim.com/product/paper-dashboard-pro-angular" target="_blank" class="btn btn-warning btn-block btn-fill">Get pro version</a>
+                </div>
+            </li>
+            <li class="button-container">
+                <div class="button-container">
+                    <a href="https://demos.creative-tim.com/paper-dashboard-angular/#/documentation/tutorial" target="_blank" class="btn btn-default btn-block btn-fill">View Documentation</a>
+                </div>
+            </li>
+            <li class="button-container text-center">
+                <button class="btn btn-link btn-fill" (click)="state = false">
+                    <i class="fa fa-times"></i> Close
+                </button>
+            </li>
+        </ul>
+    </div>
+</div> 

@@ -1,0 +1,50 @@
+.fixed-plugin {
+    position: fixed;
+    top: 180px;
+    right: 0;
+    width: 64px;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: 1031;
+    border-radius: 8px 0 0 8px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+    &.show {
+        transform: translateX(0);
+    }
+
+    .dropdown {
+        .dropdown-menu {
+            border-radius: 10px;
+            li.adjustments-line {
+                border-bottom: 1px solid #ddd;
+            }
+            li {
+                padding: 5px 2px !important;
+                .badge-colors {
+                    text-align: center;
+                    .badge {
+                        border-radius: 50%;
+                        cursor: pointer;
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        margin-right: 5px;
+                        margin-bottom: 5px;
+                        &.active {
+                            border: 2px solid #FFFFFF;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .button-container {
+        padding: 0 15px;
+        .btn {
+            margin: 10px 0;
+        }
+    }
+} 

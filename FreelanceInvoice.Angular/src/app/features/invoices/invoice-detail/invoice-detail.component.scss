@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.invoice-detail {
+  &__header {
+    margin-bottom: 2rem;
+  }
+
+  &__content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &__section {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .invoice-detail {
+    &__content {
+      padding: 1rem;
+    }
+  }
+} 

@@ -1,0 +1,113 @@
+.card-stats {
+    .card-body {
+        padding: 15px;
+        .row {
+            margin: 0;
+        }
+        .numbers {
+            text-align: right;
+            .card-category {
+                color: #9A9A9A;
+                font-size: 16px;
+                line-height: 1.4em;
+            }
+            .card-title {
+                margin: 0;
+                color: #333;
+                font-size: 32px;
+                line-height: 1.2em;
+            }
+        }
+    }
+    .card-footer {
+        padding: 0px 15px 15px;
+        .stats {
+            color: #9A9A9A;
+            font-size: 14px;
+            line-height: 1.4em;
+        }
+    }
+}
+
+.card-chart {
+    .card-header {
+        .card-title {
+            margin: 0;
+            color: #333;
+            font-size: 18px;
+            font-weight: 300;
+        }
+        .card-category {
+            margin: 0;
+            color: #9A9A9A;
+            font-size: 14px;
+        }
+    }
+    .card-body {
+        padding: 15px;
+    }
+    .card-footer {
+        padding: 0px 15px 15px;
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            color: #9A9A9A;
+            font-size: 14px;
+            line-height: 1.4em;
+            i {
+                margin-right: 5px;
+            }
+        }
+        .card-stats {
+            color: #9A9A9A;
+            font-size: 14px;
+            line-height: 1.4em;
+        }
+    }
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    color: #9A9A9A;
+    font-size: 14px;
+    line-height: 1.4em;
+    i {
+        margin-right: 5px;
+    }
+}
+
+.icon-big {
+    font-size: 3em;
+    min-height: 64px;
+    i {
+        font-size: 1em;
+        line-height: 59px;
+    }
+}
+
+.text-primary {
+    color: #9c27b0 !important;
+}
+
+.text-info {
+    color: #00bcd4 !important;
+}
+
+.text-success {
+    color: #4caf50 !important;
+}
+
+.text-warning {
+    color: #ff9800 !important;
+}
+
+.text-danger {
+    color: #f44336 !important;
+}
+
+.text-gray {
+    color: #9A9A9A !important;
+} 

@@ -1,0 +1,207 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-2xl font-bold text-gray-900">
+        {{ isEditMode ? 'Edit Invoice' : 'Create Invoice' }}
+      </h1>
+      <button
+        type="button"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+        routerLink="/invoices">
+        Cancel
+      </button>
+    </div>
+
+    <!-- Invoice Form Section Start -->
+    <div class="invoice-form-container">
+      <div class="invoice-form-container__header">
+        <h1>{{ isEditMode ? 'Edit Invoice' : 'Create Invoice' }}</h1>
+        <p>Fill in the details to {{ isEditMode ? 'update' : 'create' }} your invoice</p>
+      </div>
+
+      <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" class="invoice-form-container__form">
+        <!-- Client and Dates -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="invoice-form-container__field">
+            <label for="clientId">Client</label>
+            <select
+              id="clientId"
+              formControlName="clientId"
+              class="form-control">
+              <option value="">Select a client</option>
+              <!-- Add client options dynamically -->
+            </select>
+            <div *ngIf="invoiceForm.get('clientId')?.touched && invoiceForm.get('clientId')?.errors" class="error-message">
+              <div *ngIf="invoiceForm.get('clientId')?.errors?.['required']">Client is required</div>
+            </div>
+          </div>
+
+          <div class="invoice-form-container__field">
+            <label for="issueDate">Issue Date</label>
+            <input
+              type="date"
+              id="issueDate"
+              formControlName="issueDate"
+              class="form-control">
+            <div *ngIf="invoiceForm.get('issueDate')?.touched && invoiceForm.get('issueDate')?.errors" class="error-message">
+              <div *ngIf="invoiceForm.get('issueDate')?.errors?.['required']">Issue date is required</div>
+            </div>
+          </div>
+
+          <div class="invoice-form-container__field">
+            <label for="dueDate">Due Date</label>
+            <input
+              type="date"
+              id="dueDate"
+              formControlName="dueDate"
+              class="form-control">
+            <div *ngIf="invoiceForm.get('dueDate')?.touched && invoiceForm.get('dueDate')?.errors" class="error-message">
+              <div *ngIf="invoiceForm.get('dueDate')?.errors?.['required']">Due date is required</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoice Items -->
+        <div class="invoice-form-container__items">
+          <div class="flex justify-between items-center mb-4">
+            <h2>Invoice Items</h2>
+            <button
+              type="button"
+              class="invoice-form-container__add-item"
+              (click)="addItem()">
+              Add Item
+            </button>
+          </div>
+
+          <div formArrayName="items" class="space-y-4">
+            <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="invoice-form-container__item">
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="md:col-span-2 invoice-form-container__field">
+                  <label [for]="'description' + i">Description</label>
+                  <input
+                    type="text"
+                    [id]="'description' + i"
+                    formControlName="description"
+                    class="form-control">
+                  <div *ngIf="item.get('description')?.touched && item.get('description')?.errors" class="error-message">
+                    <div *ngIf="item.get('description')?.errors?.['required']">Description is required</div>
+                  </div>
+                </div>
+
+                <div class="invoice-form-container__field">
+                  <label [for]="'quantity' + i">Quantity</label>
+                  <input
+                    type="number"
+                    [id]="'quantity' + i"
+                    formControlName="quantity"
+                    min="1"
+                    class="form-control">
+                  <div *ngIf="item.get('quantity')?.touched && item.get('quantity')?.errors" class="error-message">
+                    <div *ngIf="item.get('quantity')?.errors?.['required']">Quantity is required</div>
+                    <div *ngIf="item.get('quantity')?.errors?.['min']">Quantity must be at least 1</div>
+                  </div>
+                </div>
+
+                <div class="invoice-form-container__field">
+                  <label [for]="'rate' + i">Rate</label>
+                  <input
+                    type="number"
+                    [id]="'rate' + i"
+                    formControlName="rate"
+                    min="0"
+                    step="0.01"
+                    class="form-control">
+                  <div *ngIf="item.get('rate')?.touched && item.get('rate')?.errors" class="error-message">
+                    <div *ngIf="item.get('rate')?.errors?.['required']">Rate is required</div>
+                    <div *ngIf="item.get('rate')?.errors?.['min']">Rate must be at least 0</div>
+                  </div>
+                </div>
+
+                <div class="invoice-form-container__field">
+                  <label [for]="'tax' + i">Tax (%)</label>
+                  <input
+                    type="number"
+                    [id]="'tax' + i"
+                    formControlName="tax"
+                    min="0"
+                    step="0.01"
+                    class="form-control">
+                  <div *ngIf="item.get('tax')?.touched && item.get('tax')?.errors" class="error-message">
+                    <div *ngIf="item.get('tax')?.errors?.['required']">Tax is required</div>
+                    <div *ngIf="item.get('tax')?.errors?.['min']">Tax must be at least 0</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 flex justify-between items-center">
+                <div class="text-sm text-gray-500">
+                  Amount: {{ calculateItemAmount(item) | currency }}
+                </div>
+                <button
+                  type="button"
+                  class="invoice-form-container__remove-item"
+                  (click)="removeItem(i)">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes and Terms -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="invoice-form-container__field">
+            <label for="notes">Notes</label>
+            <textarea
+              id="notes"
+              formControlName="notes"
+              rows="3"
+              class="form-control"></textarea>
+          </div>
+
+          <div class="invoice-form-container__field">
+            <label for="terms">Terms & Conditions</label>
+            <textarea
+              id="terms"
+              formControlName="terms"
+              rows="3"
+              class="form-control"></textarea>
+          </div>
+        </div>
+
+        <!-- Total and Submit -->
+        <div class="flex justify-between items-center pt-6 border-t">
+          <div class="invoice-form-container__total">
+            Total: {{ calculateTotal() | currency }}
+          </div>
+          <div class="flex gap-4">
+            <button
+              type="button"
+              class="text-sm text-gray-700 bg-white border border-gray-300 rounded-md px-4 py-2 hover:bg-gray-50"
+              routerLink="/invoices">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="invoiceForm.invalid || isLoading"
+              class="invoice-form-container__submit">
+              <span *ngIf="isLoading" class="loading-spinner"></span>
+              {{ isEditMode ? 'Update Invoice' : 'Create Invoice' }}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="mt-4 p-4 text-sm text-red-700 bg-red-100 rounded-md">
+        {{ errorMessage }}
+      </div>
+    </div>
+    <!-- Invoice Form Section End -->
+
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+    </div>
+  </div>
+</div> 

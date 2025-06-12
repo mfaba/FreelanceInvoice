@@ -1,0 +1,100 @@
+:host {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 260px;
+    display: block;
+    z-index: 1;
+    color: #fff;
+    font-weight: 200;
+    background-size: cover;
+    background-position: center center;
+}
+
+.logo {
+    padding: 15px 0;
+    margin: 0;
+    display: block;
+    position: relative;
+    z-index: 4;
+
+    a.logo-mini {
+        opacity: 1;
+        float: left;
+        width: 30px;
+        text-align: center;
+        margin-left: 23px;
+        margin-right: 15px;
+    }
+
+    a.logo-normal {
+        display: block;
+        opacity: 1;
+        padding: 11px 0 8px;
+        height: 50px;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .logo-img {
+        width: 30px;
+        display: inline-block;
+        height: 30px;
+        margin-left: 0px;
+        margin-right: 15px;
+        text-align: center;
+        vertical-align: middle;
+    }
+}
+
+.sidebar-wrapper {
+    position: relative;
+    height: calc(100vh - 75px);
+    overflow: auto;
+    width: 260px;
+    z-index: 4;
+    padding-bottom: 30px;
+
+    .nav {
+        margin-top: 20px;
+        display: block;
+
+        li {
+            > a {
+                margin: 10px 15px 0;
+                border-radius: 3px;
+                color: #3C4858;
+                text-transform: capitalize;
+                font-size: 13px;
+                padding: 10px 15px;
+                display: block;
+
+                i {
+                    font-size: 24px;
+                    float: left;
+                    margin-right: 15px;
+                    line-height: 30px;
+                    width: 30px;
+                    text-align: center;
+                    color: #a9afbb;
+                }
+
+                p {
+                    margin: 0;
+                    line-height: 30px;
+                    font-size: 14px;
+                    position: relative;
+                    display: block;
+                    height: auto;
+                    white-space: nowrap;
+                }
+            }
+
+            &.active > a {
+                background: rgba(255, 255, 255, 0.2);
+                color: #fff;
+            }
+        }
+    }
+} 
