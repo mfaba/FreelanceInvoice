@@ -1,169 +1,238 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="max-w-3xl mx-auto">
-    <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900">
-        {{ isEditMode ? 'Edit Client' : 'Add New Client' }}
-      </h1>
-    </div>
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="bg-white rounded shadow-sm p-5">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-5">
+                        <div>
+                            <h2 class="text-primary mb-2">{{ isEditMode ? 'Edit Client' : 'Create Client' }}</h2>
+                            <p class="text-muted">Fill in the details to {{ isEditMode ? 'update' : 'create' }} your client</p>
+                        </div>
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary rounded-pill px-4"
+                            routerLink="/clients">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </button>
+                    </div>
 
-    <!-- Form -->
-    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="space-y-6">
-      <!-- Basic Information -->
-      <div class="bg-white shadow rounded-lg p-6">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Basic Information</h2>
-        <div class="grid grid-cols-1 gap-6">
-          <!-- Name -->
-          <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Name *</label>
-            <input
-              type="text"
-              id="name"
-              formControlName="name"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              [class.border-red-300]="name?.invalid && name?.touched"
-              [class.text-red-900]="name?.invalid && name?.touched"
-              [class.placeholder-red-300]="name?.invalid && name?.touched">
-            <div *ngIf="name?.invalid && name?.touched" class="mt-1 text-sm text-red-600">
-              <span *ngIf="name?.errors?.['required']">Name is required</span>
-              <span *ngIf="name?.errors?.['minlength']">Name must be at least 2 characters</span>
+                    <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+                        <!-- Basic Information -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="card-title mb-0">Basic Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <!-- Name -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="name"
+                                                formControlName="name"
+                                                placeholder="Client Name"
+                                                required
+                                            />
+                                            <label for="name">Name *</label>
+                                            <div *ngIf="name?.invalid && name?.touched" class="text-danger small mt-1">
+                                                <div *ngIf="name?.errors?.['required']">Name is required</div>
+                                                <div *ngIf="name?.errors?.['minlength']">Name must be at least 2 characters</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input
+                                                type="email"
+                                                class="form-control"
+                                                id="email"
+                                                formControlName="email"
+                                                placeholder="Email Address"
+                                                required
+                                            />
+                                            <label for="email">Email *</label>
+                                            <div *ngIf="email?.invalid && email?.touched" class="text-danger small mt-1">
+                                                <div *ngIf="email?.errors?.['required']">Email is required</div>
+                                                <div *ngIf="email?.errors?.['email']">Please enter a valid email address</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <ngx-intl-tel-input
+                                                [cssClass]="'form-control'"
+                                                [preferredCountries]="phoneConfig.preferredCountries"
+                                                [enablePlaceholder]="phoneConfig.enablePlaceholder"
+                                                [customPlaceholder]="phoneConfig.customPlaceholder"
+                                                [separateDialCode]="phoneConfig.separateDialCode"
+                                                [numberFormat]="phoneConfig.numberFormat"
+                                                [searchCountryFlag]="phoneConfig.searchCountryFlag"
+                                                [searchCountryField]="phoneConfig.searchCountryField"
+                                                formControlName="phone"
+                                                
+                                                inputId="phone">
+                                            </ngx-intl-tel-input>
+                                             <div *ngIf="phone?.invalid && phone?.touched" class="text-danger small mt-1">
+                                                <div *ngIf="phone?.errors?.['required']">Phone number is required</div>
+                                                <div *ngIf="phone?.errors?.['validatePhoneNumber']">Please enter a valid phone number</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tax ID -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="taxId"
+                                                formControlName="taxId"
+                                                placeholder="Tax ID"
+                                            />
+                                            <label for="taxId">Tax ID</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="card mb-4" formGroupName="address">
+                            <div class="card-header bg-light">
+                                <h5 class="card-title mb-0">Address</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <!-- Street -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="street"
+                                                formControlName="street"
+                                                placeholder="Street Address"
+                                            />
+                                            <label for="street">Street</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- City, State, Zip -->
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="city"
+                                                formControlName="city"
+                                                placeholder="City"
+                                            />
+                                            <label for="city">City</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="state"
+                                                formControlName="state"
+                                                placeholder="State"
+                                            />
+                                            <label for="state">State</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="zipCode"
+                                                formControlName="zipCode"
+                                                placeholder="ZIP Code"
+                                            />
+                                            <label for="zipCode">ZIP Code</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Country -->
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="country"
+                                                formControlName="country"
+                                                placeholder="Country"
+                                            />
+                                            <label for="country">Country</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <h5 class="card-title mb-0">Additional Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <!-- Notes -->
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <textarea
+                                                class="form-control"
+                                                id="notes"
+                                                formControlName="notes"
+                                                placeholder="Notes"
+                                                style="height: 100px"
+                                            ></textarea>
+                                            <label for="notes">Notes</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-end gap-3">
+                            <button
+                                type="button"
+                                routerLink="/clients"
+                                class="btn btn-outline-secondary rounded-pill px-4">
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                [disabled]="clientForm.invalid || isLoading"
+                                class="btn btn-primary rounded-pill px-4">
+                                <i class="fas fa-save me-2"></i>{{ isEditMode ? 'Update Client' : 'Create Client' }}
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Error Message -->
+                    <div *ngIf="errorMessage" class="alert alert-danger mt-4">
+                        {{ errorMessage }}
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <!-- Email -->
-          <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email *</label>
-            <input
-              type="email"
-              id="email"
-              formControlName="email"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              [class.border-red-300]="email?.invalid && email?.touched"
-              [class.text-red-900]="email?.invalid && email?.touched"
-              [class.placeholder-red-300]="email?.invalid && email?.touched">
-            <div *ngIf="email?.invalid && email?.touched" class="mt-1 text-sm text-red-600">
-              <span *ngIf="email?.errors?.['required']">Email is required</span>
-              <span *ngIf="email?.errors?.['email']">Please enter a valid email address</span>
-            </div>
-          </div>
-
-          <!-- Phone -->
-          <div>
-            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-            <input
-              type="tel"
-              id="phone"
-              formControlName="phone"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-          </div>
         </div>
-      </div>
-
-      <!-- Address -->
-      <div class="bg-white shadow rounded-lg p-6" formGroupName="address">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Address</h2>
-        <div class="grid grid-cols-1 gap-6">
-          <!-- Street -->
-          <div>
-            <label for="street" class="block text-sm font-medium text-gray-700">Street</label>
-            <input
-              type="text"
-              id="street"
-              formControlName="street"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-          </div>
-
-          <!-- City, State, Zip -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-              <input
-                type="text"
-                id="city"
-                formControlName="city"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-              <label for="state" class="block text-sm font-medium text-gray-700">State</label>
-              <input
-                type="text"
-                id="state"
-                formControlName="state"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-            <div>
-              <label for="zipCode" class="block text-sm font-medium text-gray-700">ZIP Code</label>
-              <input
-                type="text"
-                id="zipCode"
-                formControlName="zipCode"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-            </div>
-          </div>
-
-          <!-- Country -->
-          <div>
-            <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-            <input
-              type="text"
-              id="country"
-              formControlName="country"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-          </div>
-        </div>
-      </div>
-
-      <!-- Additional Information -->
-      <div class="bg-white shadow rounded-lg p-6">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Additional Information</h2>
-        <div class="grid grid-cols-1 gap-6">
-          <!-- Tax ID -->
-          <div>
-            <label for="taxId" class="block text-sm font-medium text-gray-700">Tax ID</label>
-            <input
-              type="text"
-              id="taxId"
-              formControlName="taxId"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-          </div>
-
-          <!-- Notes -->
-          <div>
-            <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
-            <textarea
-              id="notes"
-              formControlName="notes"
-              rows="4"
-              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- Form Actions -->
-      <div class="flex justify-end space-x-4">
-        <button
-          type="button"
-          routerLink="/clients"
-          class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-          Cancel
-        </button>
-        <button
-          type="submit"
-          [disabled]="clientForm.invalid || isLoading"
-          class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
-          {{ isEditMode ? 'Update Client' : 'Create Client' }}
-        </button>
-      </div>
-    </form>
-
-    <!-- Error Message -->
-    <div *ngIf="errorMessage" class="mt-4 p-4 text-sm text-red-700 bg-red-100 rounded-md">
-      {{ errorMessage }}
     </div>
+</div>
 
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+<!-- Loading State -->
+<div *ngIf="isLoading" class="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(0,0,0,0.5); z-index: 9999;">
+    <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
     </div>
-  </div>
 </div> 

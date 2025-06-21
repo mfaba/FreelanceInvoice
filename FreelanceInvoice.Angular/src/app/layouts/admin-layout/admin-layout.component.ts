@@ -9,7 +9,11 @@ import { FixedPluginComponent } from '../fixedplugin/fixedplugin.component';
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
-  styleUrls: ['./admin-layout.component.scss'],
+  styleUrls: [
+    './admin-layout.component.scss',
+    '../../../assets/scss/paper-dashboard.scss',
+    '../../../assets/css/demo.css'
+  ],
   standalone: true,
   imports: [
     CommonModule,

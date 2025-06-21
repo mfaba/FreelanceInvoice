@@ -46,7 +46,8 @@
               "src/assets/lib/owlcarousel/assets/owl.carousel.min.css",
               "src/assets/lib/lightbox/css/lightbox.min.css",
               "https://use.fontawesome.com/releases/v5.15.4/css/all.css",
-              "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+              "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css",
+              "./node_modules/intl-tel-input/build/css/intlTelInput.css"
             ],
             "scripts": [
               "src/assets/lib/wow/wow.min.js",

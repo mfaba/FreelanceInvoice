@@ -1,13 +1,12 @@
 <div class="wrapper">
-    <div class="sidebar" data-color="white" data-active-color="danger">
-        <sidebar-cmp></sidebar-cmp>
+    <div  data-color="white" data-active-color="danger">
+        <app-sidebar></app-sidebar>
     </div>
     <div class="main-panel">
-        <navbar-cmp></navbar-cmp>
-        <div class="content">
+        <div class="content mt-0">
             <router-outlet></router-outlet>
         </div>
-        <footer-cmp></footer-cmp>
+        <app-footer></app-footer>
     </div>
 </div>
-<fixedplugin-cmp></fixedplugin-cmp>
+<app-fixed-plugin></app-fixed-plugin> 

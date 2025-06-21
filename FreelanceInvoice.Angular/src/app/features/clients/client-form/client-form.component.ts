@@ -4,19 +4,34 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClientService } from '../services/client.service';
 import { Client } from '../models/client.model';
+import { NgxIntlTelInputModule, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 @Component({
   selector: 'app-client-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './client-form.component.html'
+  imports: [CommonModule, ReactiveFormsModule, NgxIntlTelInputModule],
+  templateUrl: './client-form.component.html',
+  styleUrl: './client-form.component.scss'
 })
+
 export class ClientFormComponent implements OnInit {
   clientForm: FormGroup;
   isEditMode = false;
   isLoading = false;
   errorMessage = '';
   clientId: number | null = null;
+
+  // Phone input configuration
+  phoneConfig = {
+    separateDialCode: true,
+    preferredCountries: ['us', 'gb', 'ca', 'au'],
+    onlyCountries: [],
+    enablePlaceholder: true,
+    customPlaceholder: 'Enter phone number',
+    numberFormat: PhoneNumberFormat.International,
+    searchCountryFlag: true,
+    searchCountryField: [SearchCountryField.Iso2, SearchCountryField.Name]
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -52,7 +67,14 @@ export class ClientFormComponent implements OnInit {
     this.isLoading = true;
     this.clientService.getClient(this.clientId!).subscribe({
       next: (client) => {
-        this.clientForm.patchValue(client);
+        // Handle phone data for the international phone input
+        const formData = { ...client };
+        if (formData.phone && typeof formData.phone === 'string') {
+          // The phone input expects an object, but we store it as a string
+          // We'll let the component handle the conversion
+          formData.phone = formData.phone;
+        }
+        this.clientForm.patchValue(formData);
         this.isLoading = false;
       },
       error: (error) => {
@@ -70,6 +92,11 @@ export class ClientFormComponent implements OnInit {
 
     this.isLoading = true;
     const clientData = this.clientForm.value;
+    
+    // Handle phone data - extract the full number if it's an object
+    if (clientData.phone && typeof clientData.phone === 'object') {
+      clientData.phone = clientData.phone.internationalNumber || clientData.phone.number;
+    }
 
     if (this.isEditMode) {
       this.clientService.updateClient(this.clientId!, clientData).subscribe({

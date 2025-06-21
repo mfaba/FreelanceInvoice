@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles that are used across all layouts */
 
 :root {
     --primary: #00B98E;
@@ -10,39 +10,22 @@
 body {
     font-family: 'Rubik', sans-serif;
     color: #555555;
+    margin: 0;
+    padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    color: var(--dark);
-}
+/* Common utility classes */
+.text-primary { color: var(--primary) !important; }
+.text-secondary { color: var(--secondary) !important; }
+.text-light { color: var(--light) !important; }
+.text-dark { color: var(--dark) !important; }
 
-.btn {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 600;
-    padding: 12px 30px;
-    border-radius: 50px;
-}
+.bg-primary { background-color: var(--primary) !important; }
+.bg-secondary { background-color: var(--secondary) !important; }
+.bg-light { background-color: var(--light) !important; }
+.bg-dark { background-color: var(--dark) !important; }
 
-.btn-primary {
-    background-color: var(--primary);
-    border-color: var(--primary);
-}
-
-.btn-primary:hover {
-    background-color: #009d7a;
-    border-color: #009d7a;
-}
-
-.text-primary {
-    color: var(--primary) !important;
-}
-
-.bg-primary {
-    background-color: var(--primary) !important;
-}
-
-/* Animation Classes */
+/* Common animations */
 .wow {
     visibility: hidden;
 }

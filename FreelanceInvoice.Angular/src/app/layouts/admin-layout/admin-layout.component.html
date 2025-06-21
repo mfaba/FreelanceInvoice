@@ -1,8 +1,9 @@
 <div class="wrapper">
-    <app-sidebar></app-sidebar>
+    <div  data-color="white" data-active-color="danger">
+        <app-sidebar></app-sidebar>
+    </div>
     <div class="main-panel">
-        <app-navbar></app-navbar>
-        <div class="content">
+        <div class="content mt-0">
             <router-outlet></router-outlet>
         </div>
         <app-footer></app-footer>

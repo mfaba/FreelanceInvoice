@@ -47,7 +47,10 @@
         vertical-align: middle;
     }
 }
-
+li.active{
+    background-color: #30796cd3 !important;
+    color: #fff !important;    
+}
 .sidebar-wrapper {
     position: relative;
     height: calc(100vh - 75px);

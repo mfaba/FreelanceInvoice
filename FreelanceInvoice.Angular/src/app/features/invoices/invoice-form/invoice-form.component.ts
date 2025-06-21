@@ -11,7 +11,6 @@ import { Invoice, InvoiceItem } from '../models/invoice.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './invoice-form.component.html',
   styleUrls: ['./invoice-form.component.scss']
-
 })
 export class InvoiceFormComponent implements OnInit {
   invoiceForm: FormGroup;
@@ -27,6 +26,7 @@ export class InvoiceFormComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.invoiceForm = this.fb.group({
+      number: ['', Validators.required],
       clientId: ['', Validators.required],
       clientName: ['', Validators.required],
       issueDate: ['', Validators.required],
@@ -39,40 +39,51 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.invoiceId = Number(this.route.snapshot.paramMap.get('id'));
+    this.invoiceId = this.route.snapshot.params['id'];
     if (this.invoiceId) {
       this.isEditMode = true;
       this.loadInvoice();
-    } else {
-      this.addItem(); // Add an empty item for new invoices
     }
-  }
-
-  private loadInvoice(): void {
-    this.isLoading = true;
-    this.invoiceService.getInvoice(this.invoiceId!).subscribe({
-      next: (invoice) => {
-        this.invoiceForm.patchValue(invoice);
-        // Clear existing items
-        while (this.items.length) {
-          this.items.removeAt(0);
-        }
-        // Add invoice items
-        invoice.items.forEach(item => {
-          this.items.push(this.createItemFormGroup(item));
-        });
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.errorMessage = 'Failed to load invoice. Please try again.';
-        this.isLoading = false;
-        console.error('Error loading invoice:', error);
-      }
-    });
   }
 
   get items() {
     return this.invoiceForm.get('items') as FormArray;
+  }
+
+  loadInvoice(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.invoiceService.getInvoice(this.invoiceId!).subscribe({
+      next: (invoice) => {
+        this.invoiceForm.patchValue({
+          number: invoice.number,
+          clientId: invoice.clientId,
+          clientName: invoice.clientName,
+          issueDate: this.formatDate(invoice.issueDate),
+          dueDate: this.formatDate(invoice.dueDate),
+          status: invoice.status,
+          notes: invoice.notes,
+          terms: invoice.terms
+        });
+
+        // Clear existing items
+        while (this.items.length) {
+          this.items.removeAt(0);
+        }
+
+        // Add invoice items
+        invoice.items.forEach(item => {
+          this.items.push(this.createItemFormGroup(item));
+        });
+
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Failed to load invoice. Please try again.';
+      }
+    });
   }
 
   createItemFormGroup(item?: InvoiceItem): FormGroup {
@@ -92,30 +103,33 @@ export class InvoiceFormComponent implements OnInit {
     this.items.removeAt(index);
   }
 
-  calculateItemAmount(item: any): number {
+  updateItemAmount(index: number): void {
+    const item = this.items.at(index);
     const quantity = item.get('quantity')?.value || 0;
     const rate = item.get('rate')?.value || 0;
     const tax = item.get('tax')?.value || 0;
-    return (quantity * rate) * (1 + tax / 100);
+    const amount = (quantity * rate) + tax;
+    item.patchValue({ amount });
   }
 
-  calculateSubtotal(): number {
-    return this.items.controls.reduce((total, item) => {
-      return total + this.calculateItemAmount(item as FormGroup);
-    }, 0);
+  calculateItemAmount(index: number): number {
+    const item = this.items.at(index);
+    const quantity = item.get('quantity')?.value || 0;
+    const rate = item.get('rate')?.value || 0;
+    const tax = item.get('tax')?.value || 0;
+    return (quantity * rate) + tax;
   }
 
   calculateTotal(): number {
-    const subtotal = this.calculateSubtotal();
-    const taxAmount = this.items.controls.reduce((total, item) => {
-      if (item instanceof FormGroup) {
-        const itemAmount = this.calculateItemAmount(item);
-        const tax = item.get('tax')?.value || 0;
-        return total + (itemAmount - itemAmount / (1 + tax / 100));
-      }
-      return total;
+    return this.items.controls.reduce((total, item) => {
+      return total + this.calculateItemAmount(this.items.controls.indexOf(item));
     }, 0);
-    return subtotal;
+  }
+
+  formatDate(date: Date | string): string {
+    if (!date) return '';
+    const d = new Date(date);
+    return d.toISOString().split('T')[0];
   }
 
   onSubmit(): void {
@@ -124,49 +138,36 @@ export class InvoiceFormComponent implements OnInit {
     }
 
     this.isLoading = true;
-    const invoiceData = this.invoiceForm.value;
+    this.errorMessage = '';
 
-    // Calculate amounts for each item
-    invoiceData.items = invoiceData.items.map((item: any) => ({
-      ...item,
-      amount: this.calculateItemAmount(this.fb.group(item))
-    }));
-
-    // Calculate totals
-    invoiceData.subtotal = this.calculateSubtotal();
-    invoiceData.tax = this.calculateTotal() - invoiceData.subtotal;
-    invoiceData.total = this.calculateTotal();
+    const formValue = this.invoiceForm.value;
+    const invoice: Invoice = {
+      ...formValue,
+      subtotal: this.calculateTotal(),
+      tax: formValue.items.reduce((sum: number, item: any) => sum + (item.tax || 0), 0),
+      total: this.calculateTotal()
+    };
 
     if (this.isEditMode) {
-      this.invoiceService.updateInvoice(this.invoiceId!, invoiceData).subscribe({
+      this.invoiceService.updateInvoice(this.invoiceId!, invoice).subscribe({
         next: () => {
           this.router.navigate(['/invoices']);
         },
         error: (error) => {
-          this.errorMessage = 'Failed to update invoice. Please try again.';
           this.isLoading = false;
-          console.error('Error updating invoice:', error);
+          this.errorMessage = error.error?.message || 'Failed to update invoice. Please try again.';
         }
       });
     } else {
-      this.invoiceService.createInvoice(invoiceData).subscribe({
+      this.invoiceService.createInvoice(invoice).subscribe({
         next: () => {
           this.router.navigate(['/invoices']);
         },
         error: (error) => {
-          this.errorMessage = 'Failed to create invoice. Please try again.';
           this.isLoading = false;
-          console.error('Error creating invoice:', error);
+          this.errorMessage = error.error?.message || 'Failed to create invoice. Please try again.';
         }
       });
     }
   }
-
-  get clientId() { return this.invoiceForm.get('clientId'); }
-  get clientName() { return this.invoiceForm.get('clientName'); }
-  get issueDate() { return this.invoiceForm.get('issueDate'); }
-  get dueDate() { return this.invoiceForm.get('dueDate'); }
-  get status() { return this.invoiceForm.get('status'); }
-  get notes() { return this.invoiceForm.get('notes'); }
-  get terms() { return this.invoiceForm.get('terms'); }
 } 
